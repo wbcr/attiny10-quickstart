@@ -1,8 +1,10 @@
-# AVR Development Quick Start (using ATTiny10 + STK600 for external TPI programming)
+# AVR Development Quick Start (ATTiny10 + STK600 for external TPI programming)
 
 This a tiny example project to quick start development using the Atmel toolchain under Linux. It uses the ATTiny10 that can be programmed only in TPI mode. STK600 does not directly support external programming in TPI mode
 
-## 1. Install the development toolchain on your workstation. On Arch Linux you can install the Atmel provided packages:
+## 1. Install the development toolchain.
+
+   On Arch Linux you can install the Atmel provided packages:
 
 ```shell
    $ yaourt -S avr-gcc-atmel
@@ -13,7 +15,9 @@ This a tiny example project to quick start development using the Atmel toolchain
    On a Debian derived distro, either use the community provided packages (avr-gcc, avr-libc, avrdude) or download an install
    the (Atmel provided packages)[http://www.atmel.com/tools/ATMELAVRTOOLCHAINFORLINUX.aspx) manually.
    
-## 1. Verify your toolchain by compiling this tiny test application and generate a hex file:
+## 2. Verify your toolchain.
+
+   You can do that by compiling this tiny test application and generate a hex file:
 
 ```shell
    $ make
@@ -25,7 +29,9 @@ This a tiny example project to quick start development using the Atmel toolchain
    avr-objcopy -O ihex demo.elf demo.hex
 ```
 
-## 1. Connect your programmer and see if it is properly recognized by your system:
+## 3. Connect your programmer.
+
+   See if it is properly recognized by your system:
 
 ```shell
    $ lsusb
@@ -41,13 +47,18 @@ This a tiny example project to quick start development using the Atmel toolchain
    Save the rule and update udev:
 
 ```shell
-   $ cp 90-atmel-stk600.rules /etc/udev/rules.d/
-   $ sudo udevadm control --reload-rules && udevadm trigger
+   # cp 90-atmel-stk600.rules /etc/udev/rules.d/
+   # udevadm control --reload-rules && udevadm trigger
 
-   $ ls -l /dev/bus/usb/001/035 
+   # ls -l /dev/bus/usb/001/035 
    crw-rw-rw- 1 root root 189, 34 júl 14 16:02 /dev/bus/usb/001/035
 ```
-## 1. Connect the ATTiny10 MCU. Make sure the following settins are correct:
+
+   ![STK600 connections](../master/img/stk600.jpg)
+
+## 4. Connect the ATtiny10 MCU.
+
+   Make sure the following settings are correct:
 
    * The 6 pin ISP/PDI header on STK600 is connected to the microcontroller's breakout board. Only pins TPICLK, TPIDATA, GND, VCC should be connected.
    * The RESET pin of the MCU is connected directly to pin 1 on the header for the RESET jumper.
@@ -55,7 +66,11 @@ This a tiny example project to quick start development using the Atmel toolchain
    * Clock selection switch is on 'INT' as we are using the MCU's internal clock (thus disconnecting STK600's clock from TPICLK).
    * PB2 pin of the MCU is connected to one of hte LED pins on STK600 (LED6 in the picture).
 
-## 1. Make sure VTARGET is set to 5V:
+   ![STK600 jumper settings](../master/img/jumpers.jpg)
+
+## 5. Configure your programmer.
+
+   Make sure VTARGET is set to 5V:
 
 ```shell
 	$ avrdude -c stk600 -p t10 -t
@@ -73,7 +88,7 @@ This a tiny example project to quick start development using the Atmel toolchain
 	avrdude done.  Thank you.
 ```
 
-## 1. Upload your hex file to the microcontroller:
+## 6. Upload your hex file to the MCU.
 
 ```shell
 	$ make upload
@@ -108,13 +123,15 @@ This a tiny example project to quick start development using the Atmel toolchain
 	avrdude done.  Thank you.
 ```
 
-## 1. Voila! LED6 should be blinking with a frequency of 1Hz.
+## 7. Voila!
 
-References
+   LED6 should be blinking with a frequency of 1Hz.
+
+## References
 
 * [Avr-libc demo project](http://www.nongnu.org/avr-libc/user-manual/group__demo__project.html)
 * [Programming ATtiny in Linux](http://joost.damad.be/2014/01/programming-attiny10-in-linux.html)
 * [ATMEL STK600 TPI Programming](http://www.atmel.com/webdoc/stk600/stk600.section.gak_mde_lc.html)
 * [ATMEL TPI Programming application node](http://www.atmel.com/Images/doc8373.pdf)
 * [ATMEL ATTiny10 datasheet](http://www.atmel.com/images/atmel-8127-avr-8-bit-microcontroller-attiny4-attiny5-attiny9-attiny10_datasheet.pdf)
-* [AVR Freaks forum: ATTiny10 TPI & STK600](http://www.avrfreaks.net/forum/attiny10-tpi-stk600)
+* [AVR Freaks forum: ATtiny10 TPI & STK600](http://www.avrfreaks.net/forum/attiny10-tpi-stk600)
