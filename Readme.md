@@ -1,4 +1,6 @@
-# AVR Development Quick Start (ATTiny10 + STK600 for external TPI programming)
+# AVR Development Quick Start
+
+** ATtiny10 w/ STK600 for external TPI programming **
 
 This a tiny example project to quick start development using the Atmel toolchain under Linux. It uses the ATTiny10 that can be programmed only in TPI mode. STK600 does not directly support external programming in TPI mode
 
@@ -17,7 +19,7 @@ This a tiny example project to quick start development using the Atmel toolchain
    
 ## 2. Verify your toolchain.
 
-   You can do that by compiling this tiny test application and generate a hex file:
+   You can do that by compiling this tiny test application and generating a hex file:
 
 ```shell
    $ make
@@ -51,7 +53,7 @@ This a tiny example project to quick start development using the Atmel toolchain
    # udevadm control --reload-rules && udevadm trigger
 
    # ls -l /dev/bus/usb/001/035 
-   crw-rw-rw- 1 root root 189, 34 júl 14 16:02 /dev/bus/usb/001/035
+     crw-rw-rw- 1 root root 189, 34 júl 14 16:02 /dev/bus/usb/001/035
 ```
 
    ![STK600 connections](../master/img/stk600.jpg)
@@ -73,59 +75,59 @@ This a tiny example project to quick start development using the Atmel toolchain
    Make sure VTARGET is set to 5V:
 
 ```shell
-	$ avrdude -c stk600 -p t10 -t
+$ avrdude -c stk600 -p t10 -t
 
-	avrdude: AVR device initialized and ready to accept instructions
+avrdude: AVR device initialized and ready to accept instructions
 
-	Reading | ################################################## | 100% 0.00s
+Reading | ################################################## | 100% 0.00s
 
-	avrdude: Device signature = 0x1e9003 (probably t10)
-	avrdude> vtarg 5V
-	>>> vtarg 5V 
-	avrdude> quit
-	>>> quit 
+avrdude: Device signature = 0x1e9003 (probably t10)
+avrdude> vtarg 5V
+>>> vtarg 5V 
+avrdude> quit
+>>> quit 
 
-	avrdude done.  Thank you.
+avrdude done.  Thank you.
 ```
 
 ## 6. Upload your hex file to the MCU.
 
 ```shell
-	$ make upload
-	avrdude -c stk600 -p t10 -U flash:w:demo.hex
+$ make upload
+avrdude -c stk600 -p t10 -U flash:w:demo.hex
 
-	avrdude: AVR device initialized and ready to accept instructions
+avrdude: AVR device initialized and ready to accept instructions
 
-	Reading | ################################################## | 100% 0.00s
+Reading | ################################################## | 100% 0.00s
 
-	avrdude: Device signature = 0x1e9003 (probably t10)
-	avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
-	To disable this feature, specify the -D option.
-	avrdude: erasing chip
-	avrdude: reading input file "demo.hex"
-	avrdude: input file demo.hex auto detected as Intel Hex
-	avrdude: writing flash (70 bytes):
+avrdude: Device signature = 0x1e9003 (probably t10)
+avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
+To disable this feature, specify the -D option.
+avrdude: erasing chip
+avrdude: reading input file "demo.hex"
+avrdude: input file demo.hex auto detected as Intel Hex
+avrdude: writing flash (70 bytes):
 
-	Writing | ################################################## | 100% 0.19s
+Writing | ################################################## | 100% 0.19s
 
-	avrdude: 70 bytes of flash written
-	avrdude: verifying flash memory against demo.hex:
-	avrdude: load data flash data from input file demo.hex:
-	avrdude: input file demo.hex auto detected as Intel Hex
-	avrdude: input file demo.hex contains 70 bytes
-	avrdude: reading on-chip flash data:
+avrdude: 70 bytes of flash written
+avrdude: verifying flash memory against demo.hex:
+avrdude: load data flash data from input file demo.hex:
+avrdude: input file demo.hex auto detected as Intel Hex
+avrdude: input file demo.hex contains 70 bytes
+avrdude: reading on-chip flash data:
 
-	Reading | ################################################## | 100% 0.01s
+Reading | ################################################## | 100% 0.01s
 
-	avrdude: verifying ...
-	avrdude: 70 bytes of flash verified
+avrdude: verifying ...
+avrdude: 70 bytes of flash verified
 
-	avrdude done.  Thank you.
+avrdude done.  Thank you.
 ```
 
 ## 7. Voila!
 
-   LED6 should be blinking with a frequency of 1Hz.
+   LED6 should be blinking at a frequency of 1Hz.
 
 ## References
 
