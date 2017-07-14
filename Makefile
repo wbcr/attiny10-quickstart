@@ -16,6 +16,7 @@ CC      := avr-gcc
 OBJCOPY := avr-objcopy
 SIZE    := avr-size
 
+# keep intermediate files
 .PRECIOUS: $(OBJECTS) %.hex %.elf
 
 all: $(TARGET)
