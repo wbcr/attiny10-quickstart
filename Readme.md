@@ -2,77 +2,89 @@
 
 ** ATtiny10 w/ STK600 for external TPI programming **
 
-This a tiny example project to quick start development using the Atmel toolchain under Linux. It uses the ATTiny10 that can be programmed only in TPI mode. STK600 does not directly support external programming in TPI mode
+This a tiny example project to quick start development using the Atmel toolchain
+under Linux. It uses the ATTiny10 that can be programmed only in TPI mode.
+STK600 does not directly support external programming in TPI mode
 
-## 1. Install the development toolchain.
+## 1. Install the development toolchain
 
    On Arch Linux you can install the Atmel provided packages:
 
 ```shell
-   $ yaourt -S avr-gcc-atmel
-   $ yaourt -S avr-libc-atmel
-   $ sudo pacman -S avrdude
+$ yaourt -S avr-gcc-atmel
+$ yaourt -S avr-libc-atmel
+$ sudo pacman -S avrdude
 ```
 
-   On a Debian derived distro, either use the community provided packages (avr-gcc, avr-libc, avrdude) or download an install
-   the (Atmel provided packages)[http://www.atmel.com/tools/ATMELAVRTOOLCHAINFORLINUX.aspx) manually.
-   
-## 2. Verify your toolchain.
+On a Debian derived distro, either use the community provided packages (avr-gcc,
+avr-libc, avrdude) or download an install the [Atmel provided packages](
+http://www.atmel.com/tools/ATMELAVRTOOLCHAINFORLINUX.aspx) manually.
 
-   You can do that by compiling this tiny test application and generating a hex file:
+## 2. Verify your toolchain
+
+You can do that by compiling this tiny test application and generating a hex file:
 
 ```shell
-   $ make
-   avr-gcc -c -std=gnu99 -g -Os -Wall -DF_CPU=1000000 -mmcu=attiny10 -c src/main.c -o src/main.o
-   avr-gcc -mmcu=attiny10 -o demo.elf src/main.o
-   avr-size demo.elf
-      text	   data	    bss	    dec	    hex	filename
-        70	      0	      0	     70	     46	demo.elf
-   avr-objcopy -O ihex demo.elf demo.hex
+$ make
+avr-gcc -c -std=gnu99 -g -Os -Wall -DF_CPU=1000000 -mmcu=attiny10 -c src/main.c
+-o src/main.o
+avr-gcc -mmcu=attiny10 -o demo.elf src/main.o
+avr-size demo.elf
+    text   data     bss     dec     hex filename
+     70       0       0      70      46 demo.elf
+avr-objcopy -O ihex demo.elf demo.hex
 ```
 
-## 3. Connect your programmer.
+## 3. Connect your programmer
 
    See if it is properly recognized by your system:
 
 ```shell
-   $ lsusb
-   ...
-   Bus 001 Device 025: ID 03eb:2106 Atmel Corp. STK600 development board
+$ lsusb
+  ...
+Bus 001 Device 025: ID 03eb:2106 Atmel Corp. STK600 development board
 ```
 
-   TIP: Avrdude uses libusb accessing the programmer. That means it needs RW access to /dev/bus/usb/$BUSID/$DEVICEID, that is by default only root writeable. In order to run Avrdude without sudo, you can add the following udev rule that makes the device world writable:
+TIP: Avrdude uses libusb accessing the programmer. That means it needs RW access
+to /dev/bus/usb/$BUSID/$DEVICEID, that is by default only root writeable. In
+order to run Avrdude without sudo, you can add the following udev rule that makes
+the device world writable:
 
 ```
-   SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2106", MODE="0666"
-```   
-   Save the rule and update udev:
+SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2106", MODE="0666"
+```
+
+Save the rule and update udev:
 
 ```shell
-   # cp 90-atmel-stk600.rules /etc/udev/rules.d/
-   # udevadm control --reload-rules && udevadm trigger
+# cp 90-atmel-stk600.rules /etc/udev/rules.d/
+# udevadm control --reload-rules && udevadm trigger
 
-   # ls -l /dev/bus/usb/001/035 
-     crw-rw-rw- 1 root root 189, 34 júl 14 16:02 /dev/bus/usb/001/035
+# ls -l /dev/bus/usb/001/035
+  crw-rw-rw- 1 root root 189, 34 júl 14 16:02 /dev/bus/usb/001/035
 ```
 
-   ![STK600 connections](../master/img/stk600.jpg)
+![STK600 connections](../master/img/stk600.jpg)
 
-## 4. Connect the ATtiny10 MCU.
+## 4. Connect the ATtiny10 MCU
 
-   Make sure the following settings are correct:
+Make sure the following settings are correct:
 
-   * The 6 pin ISP/PDI header on STK600 is connected to the microcontroller's breakout board. Only pins TPICLK, TPIDATA, GND, VCC should be connected.
-   * The RESET pin of the MCU is connected directly to pin 1 on the header for the RESET jumper.
-   * VTARGET jumper is set.
-   * Clock selection switch is on 'INT' as we are using the MCU's internal clock (thus disconnecting STK600's clock from TPICLK).
-   * PB2 pin of the MCU is connected to one of hte LED pins on STK600 (LED6 in the picture).
+* The 6 pin ISP/PDI header on STK600 is connected to the microcontroller's
+  breakout board. Only pins TPICLK, TPIDATA, GND, VCC should be connected.
+* The RESET pin of the MCU is connected directly to pin 1 on the header for
+  the RESET jumper.
+* VTARGET jumper is set.
+* Clock selection switch is on 'INT' as we are using the MCU's internal clock
+  (thus disconnecting STK600's clock from TPICLK).
+* PB2 pin of the MCU is connected to one of hte LED pins on STK600 (LED6 in
+  the picture).
 
-   ![STK600 jumper settings](../master/img/jumpers.jpg)
+![STK600 jumper settings](../master/img/jumpers.jpg)
 
-## 5. Configure your programmer.
+## 5. Configure your programmer
 
-   Make sure VTARGET is set to 5V:
+Make sure VTARGET is set to 5V:
 
 ```shell
 $ avrdude -c stk600 -p t10 -t
@@ -83,14 +95,14 @@ Reading | ################################################## | 100% 0.00s
 
 avrdude: Device signature = 0x1e9003 (probably t10)
 avrdude> vtarg 5V
->>> vtarg 5V 
+>>> vtarg 5V
 avrdude> quit
->>> quit 
+>>> quit
 
 avrdude done.  Thank you.
 ```
 
-## 6. Upload your hex file to the MCU.
+## 6. Upload your hex file to the MCU
 
 ```shell
 $ make upload
@@ -127,7 +139,7 @@ avrdude done.  Thank you.
 
 ## 7. Voila!
 
-   LED6 should be blinking at a frequency of 1Hz.
+LED6 should be blinking at a frequency of 1Hz.
 
 ## References
 
