@@ -1,10 +1,15 @@
 # AVR Development Quick Start
 
-** ATtiny10 w/ STK600 for external TPI programming **
+**ATtiny10 w/ STK600 for external TPI programming**
 
 This a tiny example project to quick start development using the Atmel toolchain
 under Linux. It uses the ATTiny10 that can be programmed only in TPI mode.
-STK600 does not directly support external programming in TPI mode
+STK600 does not directly support external programming in TPI mode, because it
+requires a +12V reset signal, that was presumably considered unsafe on the header
+shared for ISP programmig. The workaround is to disconnect the RESET pin on the MCU
+from this header and connect it directly from the RESET jumper. **WARNING:
+accidentaly connecting the RESET signal to a different pin on your MCU may result
+in HW damage.*
 
 ## 1. Install the development toolchain
 
